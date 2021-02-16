@@ -1,0 +1,22 @@
+server:
+  tomcat:
+    threads:
+      max: 200
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        enabled: false
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 10000
+  threadpool:
+    default:
+      coreSize: 200
