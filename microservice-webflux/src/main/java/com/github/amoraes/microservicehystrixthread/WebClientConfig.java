@@ -9,7 +9,10 @@ import org.springframework.cloud.client.circuitbreaker.Customizer;
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 
 import java.time.Duration;
 
@@ -20,7 +23,9 @@ public class WebClientConfig {
 
     @Bean
     public WebClient webClient() {
-        return WebClient.builder()
+        HttpClient httpClient = HttpClient.create(ConnectionProvider
+                .create("webClientConnectionsProvider", 5000));
+        return WebClient.builder().clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
 
